@@ -278,7 +278,6 @@ function initialize() {
     });
 
     // Path generation
-    var flightPlanCoordinates = [];
     for (j = 0; j <= nrOfFlights; j++) {
         flightPlanCoordinates.length = 0;
         iStart = Math.floor(Math.random() * coordinates.lat.length);
