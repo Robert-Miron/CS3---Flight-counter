@@ -156,6 +156,12 @@ let coordinates = {
         17.918611
 ],
 };
+var lenL;
+var list_ac_in_cta1 = [];
+var list_ac_in_cta2 = [];
+var sum1 = 0;
+var sum2 = 0;
+
 
 function calcule(Lat_start, Long_start, Lat_end, Long_end) {
     lat.length = 0;
@@ -213,37 +219,38 @@ function calcule(Lat_start, Long_start, Lat_end, Long_end) {
 function initialize() {
 
     const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 3,
-        center: { lat: 53.920498, lng: 27.446894 },
+        zoom: 6,
+        center: { lat: 51.3333, lng: 9.4166 },
         mapTypeId: "roadmap",
     });
 
     const Sector1Coords = [
-                
-        { lat: 43.31889, lng: 0.75 },
-        { lat: 43.29889, lng: 1.108333 },
-        { lat: 43.09139, lng: 1 },
-        { lat: 43.08972, lng: 0.75 },
-        { lat: 43.31889, lng: 0.75},
+        { lat: 51.333333, lng: 9.517222 },
+        { lat: 51.085555, lng: 9.435833 },
+        { lat: 50.684722, lng: 9.305833 },
+        { lat: 50.400277, lng: 9.398333 },
+        { lat: 50.298611, lng: 9.431111 },
+        { lat: 49.555555, lng: 9.186944 },
+        { lat: 49.904444, lng: 8.493333 },
+        { lat: 50.611666, lng: 7.909444},
+        { lat: 50.7, lng: 7.666111 },
+        { lat: 50.752222, lng: 7.648888 },
+        { lat: 50.981111, lng: 8.247222 },
+        { lat: 51.108611, lng: 8.586666 },
+        { lat: 51.166388, lng: 8.741944 },
+        { lat: 51.196388, lng: 8.817777 },
+        { lat: 51.333333, lng: 9.166666 },
+        { lat: 51.333333, lng: 9.517222 },
     ];
 
     const Sector2Coords = [
-
-        { lat: 43.31889, lng: 0.75 },
-        { lat: 43.26667, lng: 1.65 },
-        { lat: 43.18389, lng: 2.196111 },
-        { lat: 43, lng: 2.050278 },
-        { lat: 43, lng: 0.75 },
-        { lat: 43.31889, lng: 0.75 },
-    ];
-
-    const Sector3Coords = [
-
-        { lat: 43.29, lng: 1.263056 },
-        { lat: 43.27528, lng: 1.508056 },
-        { lat: 43.09278, lng: 1.596111 },
-        { lat: 43.09222, lng: 1.239444 },
-        { lat: 43.29, lng: 1.263056 },
+        { lat: 51.27, lng: 8.411111  },
+        { lat: 51.108611, lng: 8.586666 },
+        { lat: 50.981111, lng: 8.247222 },
+        { lat: 50.752222, lng: 7.648888 },
+        { lat: 51.037777, lng: 7.554166 },
+        { lat: 51.178888, lng: 8.070833 },
+        { lat: 51.27, lng: 8.411111 },
     ];
 
     // Construct the polygons.
@@ -259,21 +266,10 @@ function initialize() {
     // Construct the polygons.
     const Sector2 = new google.maps.Polygon({
         paths: Sector2Coords,
-        strokeColor: "#FF0000",
+        strokeColor: "#green",
         strokeOpacity: 0.8,
         strokeWeight: 2,
-        fillColor: "#FF0000",
-        fillOpacity: 0.35,
-    });
-
-   
-    // Construct the polygons.
-    const Sector3 = new google.maps.Polygon({
-        paths: Sector3Coords,
-        strokeColor: "#FF0000",
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: "#FF0000",
+        fillColor: "green",
         fillOpacity: 0.35,
     });
 
@@ -350,21 +346,88 @@ function initialize() {
             flightPath.set('icons', icons);
 
             for (var i = 0; i <= nrOfFlights; i++) {
-                var marker;
-                if (!marker) {
-                    marker = new google.maps.Marker({
-                        position: flightPaths[i]
-                    });
-                } else {
-                    marker.setPosition(flightPaths[i]);
+                for (var j = 0; j <= 100; j++) {
+                    var marker;
+                    if (!marker) {
+                        marker = new google.maps.Marker({
+                            position: flightPaths[i][j]
+                        });
+                    } else {
+                        marker.setPosition(flightPaths[i][j]);
+                    }
+                    var lat = flightPaths[i][j].lat;
+                    var lng = flightPaths[i][j].lng;
+                    var point = [lat, lng];
+                    var isInTheCTA1 = inside(point, coordsOfAirspace(Sector1Coords));
+                    var check1 = list_ac_in_cta1.includes(i);
+
+                    if (isInTheCTA1 && (!check1)) {
+                        list_ac_in_cta1.push(i);
+                        lenL = list_ac_in_cta1.length;
+                        console.log("No of AC in CTA1 : " + list_ac_in_cta1.length);
+                        document.getElementById("noCTA1").innerHTML = lenL;
+                        sum1 = sum1 + lenL;
+                        document.getElementById("totCTA1").innerHTML = sum1;
+                    }
+                    else if ((!isInTheCTA1) && check1) {
+                        ind = list_ac_in_cta1.indexOf(i);
+                        list_ac_in_cta1.splice(ind);
+                        lenL = list_ac_in_cta1.length;
+                        console.log("No of AC in CTA1 : " + list_ac_in_cta1.length)
+                        document.getElementById("noCTA1").innerHTML = lenL
+                    }
+                    //document.getElementById("sumCta1").innerHTML=lenL}
+
+                    var check2 = list_ac_in_cta2.includes(i);
+                    var isInTheCTA2 = inside(point, coordsOfAirspace(Sector2Coords))
+                    if (isInTheCTA2 && (!check2)) {
+                        list_ac_in_cta2.push(i);
+                        lenL = list_ac_in_cta2.length;
+                        document.getElementById("noCTA2").innerHTML = lenL;
+                        console.log("No of AC in CTA2 : " + list_ac_in_cta2.length);
+                        sum2 = sum2 + lenL;
+                        document.getElementById("totCTA2").innerHTML = sum2;
+                    }
+                    else if ((!isInTheCTA2) && check2) {
+                        ind = list_ac_in_cta2.indexOf(i);
+                        list_ac_in_cta2.splice(ind);
+                        lenL = list_ac_in_cta2.length;
+                        console.log("No of AC in CTA2 : " + list_ac_in_cta2.length)
+                        document.getElementById("noCTA2").innerHTML = lenL
+                    }
                 }
             }
+            
         }, 200);
     }
     //End animation
 
-   // Sector1.setMap(map);
-    Sector2.setMap(map);
+    //verify a point is inside polygon
+    function inside(point, vs) {
+        var x = point[0], y = point[1];
+        var inside = false;
+        for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+            var xi = vs[i][0], yi = vs[i][1];
+            var xj = vs[j][0], yj = vs[j][1];
+
+            var intersect = ((yi > y) !== (yj > y))
+                && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+            if (intersect) inside = !inside;
+        }
+        return inside;
+    }
+
+    //obj to array function
+    function coordsOfAirspace(obj) {
+        var finalArray = [];
+        for (var i = 0; i < obj.length; i++) {
+            finalArray.push([obj[i].lat, obj[i].lng]);
+        }
+        return finalArray;
+    }
+
+   Sector1.setMap(map);
+   Sector2.setMap(map);
    // Sector3.setMap(map);
 
 }
