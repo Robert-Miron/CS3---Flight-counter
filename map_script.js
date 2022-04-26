@@ -190,7 +190,7 @@ const Sector2Coords = [
 
 
 
-function calcule(Lat_start, Long_start, Lat_end, Long_end) {
+function Trajectory(Lat_start, Long_start, Lat_end, Long_end) {
     lat.length = 0;
     long.length = 0;
     var R = 6371 * 1000;
@@ -254,7 +254,7 @@ function pathGeneration(nr) {
         var Long_start = coordinates.lng[iStart];
         var Lat_end = coordinates.lat[iEnd];
         var Long_end = coordinates.lng[iEnd];
-        calcule(Lat_start, Long_start, Lat_end, Long_end);
+        Trajectory(Lat_start, Long_start, Lat_end, Long_end);
         for (i = 0; i <= 100; i++)
             flightPaths[j][i] = { lat: lat[i], lng: long[i] }
     }
@@ -334,7 +334,7 @@ function animate(flightPath,i) {
         }
         if (count == 100)
             window.clearInterval();
-    }, 200);
+    }, 400);
     
 }
 
@@ -401,8 +401,6 @@ function initialize() {
         fillColor: "#FF0000",
         fillOpacity: 0.35,
     });
-    
-    // Construct the polygons.
     const Sector2 = new google.maps.Polygon({
         paths: Sector2Coords,
         strokeColor: "#green",
@@ -411,24 +409,9 @@ function initialize() {
         fillColor: "green",
         fillOpacity: 0.35,
     });
-
-    // Path generation
     pathGeneration(nrOfFlights);
-    // end of path generation
-
-    //Draw paths
     drawPaths(nrOfFlights, map);
-    //Generate animation
-    //End animation
-    
-    //verify a point is inside polygon
-    
-
-    //obj to array function
-    
-
-   Sector1.setMap(map);
-   Sector2.setMap(map);
-   // Sector3.setMap(map);
+    Sector1.setMap(map);
+    Sector2.setMap(map);
 
 }

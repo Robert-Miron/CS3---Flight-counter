@@ -93,36 +93,44 @@
                 <td>
                     <ul>
                         <li>
-                            Get the API of a map and implement it in the page.
+                            The function "initialize" initializes the map and constructs the polygons that depict the CTAs that we used:
+                            EDUUFFM141, the red one, and EDUUFFM142, the green one. They are located around Frankfurt, Germany. The cordinates were
+                            taken from Germany's' AIP. After this, it calls to the other functions and the process starts.
                         </li>
                         <li>
-                            Define the CTA sectors and show them on the map.
+                            The function "pathGeneration" generates a given number of flights that start and end at random ariports from Europe.
+                            It calls to "Trajectory".
                         </li>
                         <li>
-                            Generate random flights:<br />
-                            <ul>
-                                <li>
-                                    Create a function that generates a random number of flights that fly randodomly from one point to another.
-                                    Depending on the distance between the points the trajectory will be either a loxodrome or an orthodrome.
-                                </li>
-                                <li>
-                                    Create a function that animates the points representing the aircraft for a better visualisation of the simulation.
-                                </li>
-                            </ul>
+                            The function "Trajectory" generates the intermediary points between the start and the end point based on the distance
+                            between them. If the distance is greater than 1000 KM, then the trajectory is computed as an orthodrome, otherwise it
+                            is a loxodrome.
                         </li>
                         <li>
-                            Create the function that counts the aircraft that are inside the area-of-interest.
-                            Display the instantaneous number and the total number of aircraft that have passed thorugh it.
+                            The function "drawPaths" displays the trajectories computed using "Trajectory" on the map. It calls to "animate".
+                        </li>
+                        <li>
+                            The function "animate" moves the markers, which represent the aircraft, along their trajectory. Using "window.setInterval"
+                            the function defined inside is repeated every 200 miliseconds. At the end, the function is terminated using
+                            "window.clearInterval" in order to prevent useless repetition of the same simulation. In order to start a second simulation
+                            the page must be reloaded Ot calls to "inside".
+                        </li>
+
+                        <li>
+                            The function "inside" checks whether a given point is inside a given polygon. It calls to "coordsOfAirspace".
+                        </li>
+                        <li>
+                            The function "coordsOfAirspace" extracts the coordinates of the corners of a given polygon in order to ease their usage
+                            in the other functions.
                         </li>
                     </ul>
-                    Further details will be added to each part as we progress...
                 </td>
             </tr>
         </table>
     </div>
     <!-- The project -->
     <div id="project">
-        <table border="2px">
+        <table border="2">
             <tr>
                 <th style="vertical-align:central; font-size: 30px" ; colspan="4">
                     Traffic counter
